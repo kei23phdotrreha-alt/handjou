@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>身体障害OT治療学II 練習クイズ</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Oswald:wght@500;700&display=swap');
+
+  :root {
+    --navy: #1E2761;
+    --navy-dark: #141a47;
+    --navy-light: #2d3a8c;
+    --gold: #C9A84C;
+    --gold-light: #e4c06e;
+    --gold-dark: #a07a2a;
+    --red: #c0392b;
+    --bg: #0f1535;
+    --surface: #1a2456;
+    --surface2: #202d6a;
+    --text: #eef0f8;
+    --text-muted: #8892cc;
+    --correct: #27ae60;
+    --wrong: #e74c3c;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(30,39,97,0.6) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .screen { position: relative; z-index: 1; min-height: 100vh; }
+
+  /* ===== HOME ===== */
+  #home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+  }
+
+  .logo-badge {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 6px 16px;
+    font-size: 12px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .home-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(24px, 6vw, 40px);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    color: #fff;
+  }
+
+  .home-title span { color: var(--gold); }
+
+  .home-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .stat-card.wide { grid-column: span 2; }
+
+  .stat-value {
+    font-family: 'Oswald', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label { font-size: 11px; color: var(--text-muted); letter-spacing: 1px; }
+
+  .weak-alert {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(192,57,43,0.12);
+    border: 1px solid rgba(192,57,43,0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 13px;
+  }
+
+  .weak-alert-title { color: #e87c7c; font-weight: 700; margin-bottom: 6px; font-size: 12px; letter-spacing: 1px; }
+
+  .weak-tag {
+    display: inline-block;
+    background: rgba(192,57,43,0.2);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11px;
+    color: #e87c7c;
+    margin: 2px;
+  }
+
+  .mode-list {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .mode-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .mode-card:hover, .mode-card:active {
+    background: var(--surface2);
+    border-color: var(--gold);
+    transform: translateY(-1px);
+  }
+
+  .mode-card.disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+
+  .mode-icon { font-size: 28px; flex-shrink: 0; }
+  .mode-info { flex: 1; }
+  .mode-name { font-weight: 700; font-size: 15px; margin-bottom: 3px; }
+  .mode-desc { font-size: 12px; color: var(--text-muted); }
+  .mode-arrow { color: var(--gold); font-size: 18px; flex-shrink: 0; }
+
+  /* Section select */
+  .section-select-title {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-family: 'Oswald', sans-serif;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .section-btn-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 24px;
+  }
+
+  .section-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Noto Sans JP', sans-serif;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .section-btn:hover { background: var(--surface2); border-color: var(--gold); color: var(--text); }
+  .section-btn .sb-icon { font-size: 16px; display: block; margin-bottom: 4px; }
+  .section-btn .sb-name { font-weight: 700; font-size: 12px; color: var(--text); display: block; }
+  .section-btn .sb-count { font-size: 10px; }
+
+  .reset-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text-muted);
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .reset-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+  /* ===== QUIZ ===== */
+  #quiz { display: none; flex-direction: column; min-height: 100vh; }
+
+  .quiz-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px;
+    flex-shrink: 0;
+  }
+
+  .progress-wrap { flex: 1; }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+  }
+
+  .progress-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--navy-light), var(--gold));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .score-badge {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-family: 'Oswald', sans-serif;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .quiz-body {
+    flex: 1;
+    padding: 20px 16px 100px;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .section-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .question-text {
+    font-size: clamp(15px, 3.5vw, 18px);
+    font-weight: 700;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #fff;
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+  .option-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover:not(:disabled) { background: var(--surface2); border-color: var(--gold-dark); }
+
+  .option-letter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 1px;
+    min-width: 18px;
+  }
+
+  .option-btn.correct { background: rgba(39,174,96,0.15); border-color: var(--correct); }
+  .option-btn.correct .option-letter { color: var(--correct); }
+  .option-btn.wrong { background: rgba(231,76,60,0.15); border-color: var(--wrong); }
+  .option-btn.wrong .option-letter { color: var(--wrong); }
+  .option-btn.reveal-correct { border-color: var(--correct); background: rgba(39,174,96,0.08); }
+  .option-btn:disabled { cursor: default; }
+
+  .explanation-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    display: none;
+  }
+
+  .explanation-box strong {
+    color: var(--gold);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .next-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--navy-light), var(--navy));
+    border: 1.5px solid var(--gold);
+    border-radius: 12px;
+    color: var(--gold);
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+
+  .next-btn:hover { background: linear-gradient(135deg, var(--navy), var(--navy-dark)); transform: translateY(-1px); }
+
+  /* ===== RESULT ===== */
+  #result { display: none; flex-direction: column; align-items: center; padding: 40px 20px 60px; }
+
+  .result-title { font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700; color: var(--gold); margin-bottom: 4px; margin-top: 20px; }
+  .result-subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 28px; }
+
+  .score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--gold);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    background: var(--surface);
+    box-shadow: 0 0 30px rgba(201,168,76,0.15);
+  }
+
+  .score-pct { font-family: 'Oswald', sans-serif; font-size: 40px; font-weight: 700; color: var(--gold); line-height: 1; }
+  .score-pct-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .result-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 28px;
+  }
+
+  .result-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 8px; text-align: center; }
+  .result-stat-val { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; line-height: 1; margin-bottom: 3px; }
+  .result-stat-val.c { color: var(--correct); }
+  .result-stat-val.w { color: var(--wrong); }
+  .result-stat-val.t { color: var(--gold); }
+  .result-stat-label { font-size: 10px; color: var(--text-muted); }
+
+  .section-breakdown { width: 100%; max-width: 400px; margin-bottom: 28px; }
+  .section-breakdown-title { font-size: 11px; color: var(--text-muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; font-family: 'Oswald', sans-serif; }
+
+  .section-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+  .section-name { flex: 1; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .section-bar-wrap { flex: 2; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+  .section-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .section-pct { width: 36px; text-align: right; font-family: 'Oswald', sans-serif; font-size: 13px; color: var(--gold); flex-shrink: 0; }
+
+  .result-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 400px; }
+
+  .result-btn {
+    border-radius: 12px;
+    padding: 14px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid;
+    text-align: center;
+  }
+
+  .result-btn.primary { background: linear-gradient(135deg, var(--navy-light), var(--navy)); border-color: var(--gold); color: var(--gold); }
+  .result-btn.secondary { background: transparent; border-color: rgba(201,168,76,0.3); color: var(--text-muted); }
+  .result-btn:hover { transform: translateY(-1px); opacity: 0.9; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .quiz-body { animation: slideUp 0.3s ease; }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home" class="screen">
+  <div class="logo-badge">東京保健医療専門職大学</div>
+  <div class="home-title">身体障害OT治療学II<br><span>練習クイズ</span></div>
+  <div class="home-subtitle">第1〜7回 ｜ 87問 ｜ 5択形式</div>
+
+  <div class="stats-grid">
+    <div class="stat-card wide">
+      <div class="stat-value" id="home-accuracy">—%</div>
+      <div class="stat-label">累計正答率</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="home-attempts">0回</div>
+      <div class="stat-label">挑戦回数</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value" id="home-weak">0問</div>
+      <div class="stat-label">苦手問題数</div>
+    </div>
+  </div>
+
+  <div class="weak-alert" id="weak-alert" style="display:none;">
+    <div class="weak-alert-title">⚠ 苦手セクション（正答率50%未満）</div>
+    <div id="weak-tags"></div>
+  </div>
+
+  <div class="mode-list">
+    <div class="mode-card" onclick="startQuiz('all')">
+      <div class="mode-icon">🎲</div>
+      <div class="mode-info">
+        <div class="mode-name">全87問ランダム</div>
+        <div class="mode-desc">すべての問題をシャッフル出題</div>
+      </div>
+      <div class="mode-arrow">→</div>
+    </div>
+    <div class="mode-card" id="weak-mode-card" onclick="startQuiz('weak')">
+      <div class="mode-icon">🎯</div>
+      <div class="mode-info">
+        <div class="mode-name">苦手問題のみ</div>
+        <div class="mode-desc">正答率50%未満の問題を集中練習</div>
+      </div>
+      <div class="mode-arrow">→</div>
+    </div>
+  </div>
+
+  <div class="section-select-title">📚 セクション別練習</div>
+  <div class="section-btn-grid" id="section-btn-grid">
+    <!-- injected by JS -->
+  </div>
+
+  <button class="reset-btn" onclick="resetHistory()">履歴をリセット</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen" style="display:none; flex-direction:column;">
+  <div class="quiz-header">
+    <button class="back-btn" onclick="goHome()">←</button>
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="q-label">問題 1 / 87</span>
+        <span id="q-mode-label">全問モード</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    </div>
+    <div class="score-badge" id="score-badge">0 / 0</div>
+  </div>
+  <div class="quiz-body" id="quiz-body"></div>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen" style="display:none; flex-direction:column; align-items:center; padding:40px 20px 60px;">
+  <div class="logo-badge">結果発表</div>
+  <div class="score-circle">
+    <div class="score-pct" id="res-pct">0%</div>
+    <div class="score-pct-label">正答率</div>
+  </div>
+  <div class="result-title" id="res-grade">—</div>
+  <div class="result-subtitle" id="res-msg"></div>
+  <div class="result-stats">
+    <div class="result-stat"><div class="result-stat-val c" id="res-correct">0</div><div class="result-stat-label">正解</div></div>
+    <div class="result-stat"><div class="result-stat-val w" id="res-wrong">0</div><div class="result-stat-label">不正解</div></div>
+    <div class="result-stat"><div class="result-stat-val t" id="res-total">0</div><div class="result-stat-label">出題数</div></div>
+  </div>
+  <div class="section-breakdown">
+    <div class="section-breakdown-title">📊 セクション別正答率</div>
+    <div id="section-breakdown-list"></div>
+  </div>
+  <div class="result-actions">
+    <div class="result-btn primary" onclick="startQuiz('all')">もう一度（全問）</div>
+    <div class="result-btn secondary" onclick="startQuiz('weak')">苦手問題を集中練習</div>
+    <div class="result-btn secondary" onclick="goHome()">ホームへ戻る</div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// QUESTION DATA — 70問 5択
+// ============================================================
+const QUESTIONS = [
+  // ── Section 1: ICF（第1回）──
+  {
+    section: "ICF・基礎",
+    q: "ICFはWHOが何年に発表した国際分類か？",
+    options: ["1980年", "1990年", "2001年", "2010年", "2020年"],
+    ans: 2,
+    exp: "ICF（国際生活機能分類）はWHO が2001年に発表。1980年はICIDH（国際障害分類）。"
+  },
+  {
+    section: "ICF・基礎",
+    q: "ICIDHのモデルに関する記述として正しいのはどれか？",
+    options: [
+      "双方向・相互作用モデルである",
+      "環境因子を考慮している",
+      "一方向・線形モデルであり障害を個人の問題として捉える",
+      "参加を重視した分類である",
+      "2001年にWHOが発表した"
+    ],
+    ans: 2,
+    exp: "ICIDH（1980年）は「疾患→機能障害→能力障害→社会的不利」という一方向の線形モデルで、障害を個人の問題として捉える。"
+  },
+  {
+    section: "ICF・基礎",
+    q: "ICFにおける「活動（Activity）」の能力（Capacity）の説明として正しいのはどれか？",
+    options: [
+      "実際の生活場面での遂行を指す",
+      "最悪の環境での最小能力を指す",
+      "標準化された環境でのその人の最大能力を指す",
+      "社会への参加状況を指す",
+      "環境因子の促進効果のことである"
+    ],
+    ans: 2,
+    exp: "能力（Capacity）は標準化された環境（例：入院中の病棟）でその人が「できる」最大の能力。実行状況（Performance）は実際の生活場面での遂行。"
+  },
+  {
+    section: "ICF・基礎",
+    q: "ICFにおける「参加（Participation）」の例として最も適切なのはどれか？",
+    options: [
+      "右肩ROM制限",
+      "歩行中のバランス保持",
+      "FIMで整容4点",
+      "大工として職場復帰する",
+      "筋力低下（MMT 3）"
+    ],
+    ans: 3,
+    exp: "参加は生活・人生場面への関わり（社会・役割・人間関係）。職場復帰は参加の典型例。ROM制限・筋力低下は心身機能、FIMは活動レベル。"
+  },
+  {
+    section: "ICF・基礎",
+    q: "ICFの環境因子について正しい記述はどれか？",
+    options: [
+      "促進因子のみを評価対象とする",
+      "年齢・性別・価値観が含まれる",
+      "物的環境・人的環境・制度サービス・社会的態度などが含まれ、促進因子と阻害因子の両面を評価する",
+      "ICFでは分類されておらず臨床のみで使用する",
+      "身体的な疾患状態を指す"
+    ],
+    ans: 2,
+    exp: "環境因子には物的環境・人的環境・制度・社会的態度などが含まれ、促進因子(+)と阻害因子(-)の両面から評価する。年齢・価値観は個人因子。"
+  },
+  {
+    section: "ICF・基礎",
+    q: "OTにおけるICF活用で「能力と実行状況のギャップ」に関する説明として正しいのはどれか？",
+    options: [
+      "ギャップがあれば必ず心身機能訓練を優先する",
+      "ギャップは通常生じないため問題にならない",
+      "病棟でできても自宅でしていなければ介入のヒントになる",
+      "ギャップは環境因子とは無関係である",
+      "ギャップがあれば参加支援は不要である"
+    ],
+    ans: 2,
+    exp: "能力（最大能力）と実行状況（実生活での遂行）のギャップが介入のヒントになる。「病棟では歩けるが自宅では歩いていない」は典型例。"
+  },
+
+  // ── Section 2: 手・上肢の機能解剖（第2回）──
+  {
+    section: "手・上肢の解剖",
+    q: "手根骨の近位列の構成として正しいのはどれか？",
+    options: [
+      "大菱形骨・小菱形骨・有頭骨・有鈎骨",
+      "舟状骨・月状骨・三角骨・豆状骨",
+      "舟状骨・有頭骨・大菱形骨・小菱形骨",
+      "月状骨・三角骨・有鈎骨・有頭骨",
+      "豆状骨・有鈎骨・有頭骨・舟状骨"
+    ],
+    ans: 1,
+    exp: "近位列は舟状骨・月状骨・三角骨・豆状骨。遠位列は大菱形骨・小菱形骨・有頭骨・有鈎骨。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "Kienböck病（キーンベック病）と関連する骨はどれか？",
+    options: ["舟状骨", "月状骨", "有頭骨", "豆状骨", "三角骨"],
+    ans: 1,
+    exp: "Kienböck病は月状骨の無腐性壊死。舟状骨は骨折後の無腐性壊死に注意が必要。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "MP関節（中手指節関節）の関節形状と側副靭帯の特性として正しいのはどれか？",
+    options: [
+      "蝶番関節で側副靭帯は屈曲時に弛緩する",
+      "楕円関節で側副靭帯は伸展時に弛緩し屈曲位で緊張する",
+      "鞍関節で側副靭帯は伸展位で最も緊張する",
+      "蝶番関節で内外転は不可能である",
+      "楕円関節で側副靭帯は屈曲・伸展どちらでも弛緩する"
+    ],
+    ans: 1,
+    exp: "MP関節は楕円関節（2軸性）で内外転が可能。側副靭帯は伸展時に弛緩し屈曲位で緊張（固定）する。拘縮予防のため屈曲位固定が重要。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "橈骨神経麻痺で生じる典型的な麻痺像はどれか？",
+    options: [
+      "猿手（Ape hand）",
+      "鷲手（Claw hand）",
+      "下垂手（Drop wrist）",
+      "下垂指（Drop finger）",
+      "スワンネック変形"
+    ],
+    ans: 2,
+    exp: "橈骨神経麻痺→下垂手（手関節・手指の伸展不能）。正中神経麻痺→猿手（対立不能）。尺骨神経麻痺→鷲手（第4・5指のMP伸展・IP屈曲）。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "Power Grip（力握り）の特徴について正しいのはどれか？",
+    options: [
+      "内在筋主導で感覚フィードバックが重要",
+      "外在筋（FDP・FDS）が主導し荷重・衝撃吸収が目的",
+      "母指対立位が特徴的な把持形式である",
+      "ペンや箸の使用がその代表例である",
+      "正中神経麻痺があっても完全に保たれる"
+    ],
+    ans: 1,
+    exp: "Power Gripは外在筋（FDP・FDS）主導で荷重・衝撃吸収が目的。Precision Gripは内在筋（骨間筋・虫様筋）主導で感覚フィードバックが重要。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "手の3つのアーチのうち「横アーチ（Distal Transverse Arch）」について正しい記述はどれか？",
+    options: [
+      "橈側・尺側の縦方向の弯曲で屈筋・伸筋の張力で維持される",
+      "母指から小指間の斜め方向のアーチでPower gripのロック機構となる",
+      "手掌の横方向の弯曲で手内在筋（母指球筋・小指球筋）が維持する",
+      "前腕の骨間膜が主に維持する",
+      "崩れるとPower gripが減弱するが対立は保たれる"
+    ],
+    ans: 2,
+    exp: "横アーチは手掌の横方向の弯曲で、手内在筋（母指球筋・小指球筋）が維持。崩れると対立・カップ形成が障害される。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "DIP関節（遠位指節間関節）に唯一停止する屈筋腱はどれか？",
+    options: [
+      "浅指屈筋腱（FDS）",
+      "深指屈筋腱（FDP）",
+      "虫様筋",
+      "骨間筋",
+      "総指伸筋（EDC）"
+    ],
+    ans: 1,
+    exp: "DIP関節にはFDP（深指屈筋腱）のみが停止する。FDSはPIP関節に停止。マレット変形はDIPの伸展機構断裂で生じる。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "正中神経麻痺の作業療法介入として適切なのはどれか？",
+    options: [
+      "手関節固定スプリントと代償動作訓練",
+      "対立スプリントと感覚再教育",
+      "代償動作練習とGuyon管圧迫の評価",
+      "母指内転筋の強化訓練",
+      "小指球筋の電気刺激療法"
+    ],
+    ans: 1,
+    exp: "正中神経麻痺では対立と精巧つまみが不能（Precision gripの障害）になるため、対立スプリントと感覚再教育が適切。手関節固定スプリントは橈骨神経麻痺。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "母指CM関節の関節形状として正しいのはどれか？",
+    options: [
+      "蝶番関節（1軸性）",
+      "球関節（多軸性）",
+      "楕円関節（2軸性）",
+      "鞍関節（2軸性）",
+      "車軸関節（1軸性）"
+    ],
+    ans: 3,
+    exp: "母指CM関節は鞍関節（大菱形骨と第1中手骨の関節面が鞍状）で2軸性。橈側外転・尺側内転・掌側外転・掌側内転の組み合わせで対立が可能。"
+  },
+  {
+    section: "手・上肢の解剖",
+    q: "屈筋腱のA2プーリー（輪状靭帯A2）が存在する部位はどれか？",
+    options: [
+      "中節骨部",
+      "基節骨部",
+      "末節骨部",
+      "MP関節部",
+      "手根管内"
+    ],
+    ans: 1,
+    exp: "A2プーリーは基節骨部、A4プーリーは中節骨部に存在し、いずれも臨床的に最重要。断裂すると腱の浮き上がりと屈曲力低下が生じる。"
+  },
+
+  // ── Section 3: 骨折（第3回）──
+  {
+    section: "骨折の作業療法",
+    q: "骨折の分類で「モンテジア骨折」の組み合わせとして正しいのはどれか？",
+    options: [
+      "橈骨骨折＋尺骨頭脱臼",
+      "尺骨骨折＋橈骨頭脱臼",
+      "橈骨・尺骨両方の骨幹部骨折",
+      "大腿骨骨折＋膝蓋骨脱臼",
+      "上腕骨骨折＋肩関節脱臼"
+    ],
+    ans: 1,
+    exp: "モンテジア骨折＝尺骨骨折＋橈骨頭脱臼。ガレアッツィ骨折＝橈骨骨折＋尺骨頭脱臼。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "骨折の治癒過程を正しい順序で示しているのはどれか？",
+    options: [
+      "修復期→炎症期→再造形期",
+      "再造形期→修復期→炎症期",
+      "炎症期→修復期→再造形期",
+      "炎症期→再造形期→修復期",
+      "修復期→再造形期→炎症期"
+    ],
+    ans: 2,
+    exp: "骨折治癒過程は①炎症期（血腫形成）→②修復期（仮骨形成）→③再造形期（仮骨が本来の骨に改変）の順。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "グルト（Gurlt）の標準治癒日数で「前腕骨骨折」の目安として正しいのはどれか？",
+    options: ["2週", "3週", "4週", "5週", "8週"],
+    ans: 3,
+    exp: "前腕骨は5週が目安。中手骨2週、肋骨3週、鎖骨4週、上腕骨骨幹部6週、大腿骨頸部8〜12週。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "上腕骨顆上骨折の合併症である「フォルクマン拘縮」の病態として正しいのはどれか？",
+    options: [
+      "骨癒合が得られない偽関節の形成",
+      "コンパートメント内圧上昇による阻血性壊死・前腕屈筋群の拘縮",
+      "外傷後の骨化性筋炎による関節可動域制限",
+      "橈骨神経の圧迫による下垂指",
+      "感染による骨髄炎からの二次的拘縮"
+    ],
+    ans: 1,
+    exp: "フォルクマン拘縮はコンパートメント内圧上昇→血流減少→阻血性壊死による前腕屈筋群の拘縮。症状は5P（疼痛・蒼白・脈拍消失・麻痺・異常感覚）。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "骨折後の作業療法プログラムで浮腫予防として適切な介入はどれか？",
+    options: [
+      "患肢を心臓より低く保持する",
+      "固定関節より近位関節の他動運動を実施する",
+      "患肢挙上と筋ポンプ作用の促進、固定関節より遠位の自動運動を実施する",
+      "強い他動ストレッチを行い軟部組織を伸長する",
+      "炎症期から積極的に温熱療法を行う"
+    ],
+    ans: 2,
+    exp: "浮腫予防は患肢挙上・筋ポンプ作用の促進・固定関節より遠位の自動運動が基本。温熱療法は炎症期禁忌。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "上腕骨骨幹部骨折に合併しやすい神経損傷と麻痺像の組み合わせとして正しいのはどれか？",
+    options: [
+      "正中神経麻痺→猿手",
+      "尺骨神経麻痺→鷲手",
+      "橈骨神経麻痺→下垂手",
+      "腋窩神経麻痺→三角筋麻痺のみ",
+      "筋皮神経麻痺→前腕感覚障害"
+    ],
+    ans: 2,
+    exp: "上腕骨骨幹部骨折では橈骨神経が骨に接して走行するため損傷しやすく、下垂手（Drop wrist）を呈する。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "骨折の複合性局所疼痛症候群（CRPS）に関する記述として正しいのはどれか？",
+    options: [
+      "関節内骨折にのみ発生する合併症である",
+      "現在ではカウザルギー・ズーデック骨萎縮・RSDなどはCRPSの概念に統合されている",
+      "疼痛が全くない無痛性の慢性疾患である",
+      "骨折の整復が遅れた場合のみに生じる",
+      "発症後3ヶ月以内に完全治癒するため介入は不要"
+    ],
+    ans: 1,
+    exp: "CRPS（複合性局所疼痛症候群）はカウザルギー・ズーデック骨萎縮・反射性交感神経性ジストロフィーなどを統合した概念（2005年診断基準）。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "上腕骨近位部骨折の保存療法プログラムで最初期から開始できる運動はどれか？",
+    options: [
+      "肩関節の積極的な他動ROM訓練",
+      "振り子運動（コッドマン体操）",
+      "リラクセーションと患肢挙上・手指の屈伸",
+      "肩関節の等尺性収縮訓練",
+      "棒体操・滑車運動"
+    ],
+    ans: 2,
+    exp: "上腕骨近位部骨折保存療法では①リラクセーション・手指屈伸→②振り子運動（1週間後）→③他動→自動運動の順。術後初期は疼痛緩和と患肢管理が優先。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "骨折後の作業療法評価で「早すぎる筋力検査は骨癒合を妨げる要因になる」という注意事項はどの評価に関するものか？",
+    options: [
+      "関節可動域（ROM）測定",
+      "感覚検査（モノフィラメント）",
+      "筋力検査（MMT・握力測定）",
+      "ADL評価（FIM）",
+      "浮腫の周径測定"
+    ],
+    ans: 2,
+    exp: "筋力検査（MMT・握力測定）は術後プロトコールを確認し、早すぎる実施は骨癒合を妨げる可能性があるため時期に注意する。"
+  },
+  {
+    section: "骨折の作業療法",
+    q: "脂肪塞栓症候群の主な症状の組み合わせとして正しいのはどれか？",
+    options: [
+      "関節痛・浮腫・発熱",
+      "呼吸困難・意識障害・皮膚の点状出血",
+      "手指の壊疽・感覚障害・筋力低下",
+      "フォルクマン拘縮・内反肘・骨折遷延",
+      "骨萎縮・慢性疼痛・皮膚色調変化"
+    ],
+    ans: 1,
+    exp: "脂肪塞栓症候群は下肢長管骨・骨盤の骨折で骨髄から流出した脂肪が静脈内に入り肺塞栓・脳塞栓をきたす。主症状は呼吸困難・意識障害・皮膚の点状出血。"
+  },
+
+  // ── Section 4: 橈骨遠位端骨折（第4回）──
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折の疫学に関する記述として正しいのはどれか？",
+    options: [
+      "発生率は男性が女性の約3倍である",
+      "転落・交通事故による受傷が最多である",
+      "女性は男性の1.9〜3倍の発生率で、立位からの転倒が受傷機転の約半数以上を占める",
+      "受傷場所は屋内が最多であり夏季に多い",
+      "若年男性のスポーツ外傷として最も多い骨折である"
+    ],
+    ans: 2,
+    exp: "橈骨遠位端骨折は女性は男性の1.9〜3倍の発生率。受傷機転は立位からの転倒が49〜77%（女性に多い）。受傷は屋外・冬季が多い。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折のAO分類でA型の説明として正しいのはどれか？",
+    options: [
+      "関節内部分骨折で男性優位",
+      "関節内完全骨折で粉砕型",
+      "関節外骨折で女性に多く全骨折の54〜66%を占める",
+      "骨幹部のみの骨折で関節面に及ばない",
+      "掌側Barton骨折が含まれる"
+    ],
+    ans: 2,
+    exp: "AO分類：A型（関節外骨折）54〜66%で女性優位、B型（関節内部分骨折）9〜14%で男性優位、C型（関節内完全骨折）25〜32%。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端の正常アライメントで「掌側傾斜（Palmar Tilt）」の正常値として正しいのはどれか？",
+    options: ["23°（13〜30°）", "8mm", "12°（1〜21°）", "0mm", "4〜5mm"],
+    ans: 2,
+    exp: "正常値：掌側傾斜（PT）12°（1〜21°）、橈側傾斜（RI）23°（13〜30°）、橈骨長差（RL）8mm、関節面段差0mm。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "掌側ロッキングプレート（ORIF）後にOTが特に注意すべき腱癒着はどれか？",
+    options: [
+      "総指伸筋腱（EDC）の癒着",
+      "長母指屈筋腱（FPL）の癒着",
+      "示指固有伸筋（EIP）の癒着",
+      "深指屈筋腱（FDP）の癒着",
+      "橈側手根屈筋腱（FCR）の癒着"
+    ],
+    ans: 1,
+    exp: "掌側ロッキングプレート後はFPL（長母指屈筋腱）の癒着に最注意。プレートがFPLの走行直下に位置するため。創外固定ではEDC・EIPの癒着に注意。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "尺骨プラス変異（Plus Variance）が大きくなった場合に生じやすい機能障害として正しいのはどれか？",
+    options: [
+      "母指対立の障害",
+      "手関節屈曲の著明な制限",
+      "著明な前腕回外制限と尺屈制限・握力低下",
+      "示指の独立伸展困難",
+      "手根管症候群の急性発症"
+    ],
+    ans: 2,
+    exp: "プラス変異が増大すると尺骨頭が背側に亜脱臼し、回外時に掌側へ移動できなくなり著明な回外可動域制限・尺屈制限・握力低下が生じる。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折後のハンドセラピー第1期（骨折部固定優先期）での介入として適切なのはどれか？",
+    options: [
+      "手関節の積極的な他動ROM訓練を開始する",
+      "握力増強訓練と抵抗運動を開始する",
+      "骨折部安静保護・非固定部ROM維持・浮腫コントロール・ADL代償指導",
+      "前腕回内外の段階的ROM訓練を積極的に行う",
+      "職場復帰に向けた作業硬化プログラムを開始する"
+    ],
+    ans: 2,
+    exp: "第1期は骨折部の安静・固定の保護が最優先。非固定部（手指・肘・肩）のROM維持、浮腫コントロール、固定中の生活動作代償法の指導を行う。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折の合併損傷として「EPL（長母指伸筋）断裂」が生じやすい機序はどれか？",
+    options: [
+      "掌側プレートによる直接的な腱の切断",
+      "リスター結節周囲の腫脹による腱の阻血",
+      "創外固定ピン刺入部の直接圧迫",
+      "骨折片による正中神経の急性圧迫",
+      "関節内の軟骨損傷による二次的変化"
+    ],
+    ans: 1,
+    exp: "EPL断裂はリスター結節周囲の腫脹による腱の阻血が原因。伸筋支帯部分が窮屈なため腱の阻血が生じやすい。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折に合併しやすい神経損傷として最も多いのはどれか？",
+    options: [
+      "橈骨神経麻痺",
+      "尺骨神経麻痺",
+      "正中神経の急性圧迫損傷（手根管症候群への移行）",
+      "腋窩神経麻痺",
+      "前骨間神経麻痺"
+    ],
+    ans: 2,
+    exp: "橈骨遠位端骨折では骨片による直接外力・浮腫・コンパートメント症候群などにより正中神経の急性圧迫損傷が生じやすく、手根管症候群への移行に注意。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "掌側ロッキングプレート後のリハビリプロトコールで「術後早期から許可される」のはどれか？",
+    options: [
+      "重負荷作業と抵抗運動",
+      "前腕回内外の積極的な他動ストレッチ",
+      "食事・整容の使用と手指・手関節の自動ROM練習",
+      "手関節の他動ROM訓練",
+      "握力増強のための把持訓練"
+    ],
+    ans: 2,
+    exp: "掌側ロッキングプレートは内固定が安定しているため、術後早期から食事の使用が許可され、手指・手関節の自動ROM練習を開始できる。"
+  },
+  {
+    section: "橈骨遠位端骨折",
+    q: "橈骨遠位端骨折のOT評価で「CRPS（複合性局所疼痛症候群）」に関する記述として正しいのはどれか？",
+    options: [
+      "骨癒合後に必ず発症するため予防的介入は不要",
+      "激しい疼痛・著明な腫脹・皮膚色調変化を呈し早期発見・早期介入が必須",
+      "感覚障害のみが症状で運動機能は保たれる",
+      "画像所見（X線）で必ず診断できる",
+      "高齢者のみに発症するため若年者では考慮不要"
+    ],
+    ans: 1,
+    exp: "CRPSは自律/感覚/運動神経系の異常を伴う症候群。激しい疼痛・著明な腫脹・皮膚色調変化が特徴で早期発見・早期介入が必須。"
+  },
+
+  // ── Section 5: 複合・応用問題 ──
+  {
+    section: "複合・応用",
+    q: "作業療法士がICFを活用する際の「Point 4」として示された重要な考え方はどれか？",
+    options: [
+      "心身機能の回復を最終目標として据える",
+      "環境因子の活用より個人へのアプローチを優先する",
+      "「参加」の回復を最終目標に据え、心身機能の改善はそのための手段とする",
+      "ADL自立が達成されれば参加目標は設定不要",
+      "能力（Capacity）の最大化のみを目指す"
+    ],
+    ans: 2,
+    exp: "Point 4：参加を最終目標に据える。心身機能の回復は手段。「その人が望む生活・役割への参加」がOTの最終目標。"
+  },
+  {
+    section: "複合・応用",
+    q: "手の「5つの機能」のうち「感覚器官としての機能で識別・探索機能を有するもの」はどれか？",
+    options: [
+      "道具としての手（造る手）",
+      "道具を操る手（操作・操縦する手）",
+      "探る手・みる手",
+      "伝える手（意志・表現・伝達する手）",
+      "支える手（支持する手）"
+    ],
+    ans: 2,
+    exp: "探る手・みる手：手の感覚器官としての機能で識別機能や探索機能を有する。道具としての手は握り・つまみ・押さえる動作が基盤。"
+  },
+  {
+    section: "複合・応用",
+    q: "骨折後の作業療法評価で「術後せん妄」の評価として使用されるツールはどれか？",
+    options: [
+      "VAS（Visual Analogue Scale）",
+      "DASH（上肢障害評価尺度）",
+      "CAM-ICU",
+      "STEF（簡易上肢機能検査）",
+      "FIM（機能的自立度評価表）"
+    ],
+    ans: 2,
+    exp: "術後せん妄の評価にはCAM-ICUなどのせん妄評価法を使用。高齢者の外科手術では術後せん妄を評価することが多い。"
+  },
+  {
+    section: "複合・応用",
+    q: "関節可動域訓練（ROM訓練）で「凹凸の法則」を理解する必要がある場面として最も適切なのはどれか？",
+    options: [
+      "筋力増強訓練の負荷設定",
+      "浮腫の周径測定",
+      "他動運動時の関節運動の方向・モビライゼーションの決定",
+      "感覚再教育プログラムの立案",
+      "装具の材料選択"
+    ],
+    ans: 2,
+    exp: "凹凸の法則はROM訓練（特に他動運動・モビライゼーション）で関節の滑り・転がり方向を決定する際に重要な力学的原則。"
+  },
+  {
+    section: "複合・応用",
+    q: "下肢の機能解剖において「トレンデレンブルグ徴候」の防止に最も重要な筋はどれか？",
+    options: [
+      "大殿筋",
+      "腸腰筋",
+      "中殿筋",
+      "大腿四頭筋",
+      "下腿三頭筋"
+    ],
+    ans: 2,
+    exp: "片脚立位時に中殿筋が骨盤の側方沈下（トレンデレンブルグ徴候）を防止する。THA後はトレンデレンブルグ歩行に注意が必要。"
+  },
+  {
+    section: "複合・応用",
+    q: "作業療法評価で使用する「DASH」の説明として正しいのはどれか？",
+    options: [
+      "下肢機能を評価する30項目の観察評価",
+      "上肢全体の「活動・参加」レベルを評価する30項目の自己記入式質問票",
+      "関節可動域を客観的に測定するゴニオメーターを用いた評価",
+      "認知機能を測定するスクリーニングテスト",
+      "歩行能力を評価する10m歩行テスト"
+    ],
+    ans: 1,
+    exp: "DASH（上肢障害評価尺度）は30項目の自己記入式質問票で上肢全体の「活動・参加」レベルを評価。ICF「活動」に対応する標準化評価。"
+  },
+  {
+    section: "複合・応用",
+    q: "橈骨手根関節と手根中央関節が両方関与する運動はどれか？",
+    options: [
+      "前腕回内・回外",
+      "母指対立",
+      "手関節の掌背屈（屈曲・伸展）",
+      "MP関節の屈伸",
+      "肘関節の屈伸"
+    ],
+    ans: 2,
+    exp: "掌背屈（屈曲・伸展）は橈骨手根関節と手根中央関節の両者が関与。橈尺屈では近位手根列の回転運動も加わる。"
+  },
+  {
+    section: "複合・応用",
+    q: "「開放骨折（複雑骨折）」の特徴として正しいのはどれか？",
+    options: [
+      "骨折部が体外に開放されておらず感染リスクが低い",
+      "骨折部が体外に開放されており感染・癒合不全が生じやすい",
+      "病的骨折の代表例である",
+      "疲労骨折と同義で使用される",
+      "整復が不要で自然治癒する"
+    ],
+    ans: 1,
+    exp: "開放骨折（複雑骨折）は骨折部が体外に開放→感染・癒合不全が生じやすい。閉鎖骨折（単純骨折）は体外に開放されていない。"
+  },
+  {
+    section: "複合・応用",
+    q: "高齢者の橈骨遠位端骨折のリハビリテーションプログラム立案において収集すべき重要情報として最も適切な組み合わせはどれか？",
+    options: [
+      "骨折型・利き手・職業・既往歴（糖尿病など）・固定方法の安定性・術後プロトコール",
+      "性別・BMI・家族構成のみ",
+      "骨折発生からの経過日数のみ",
+      "年齢のみ（高齢者は全員同一プロトコール）",
+      "疼痛の強度（VAS値）のみ"
+    ],
+    ans: 0,
+    exp: "橈骨遠位端骨折のプログラム立案には骨折型・利き手・職業・全身的合併症・骨折部位・整復・固定方法の安定性など多面的な情報収集が必要。"
+  },
+  {
+    section: "複合・応用",
+    q: "上腕骨顆上骨折を有する小児への作業療法で「他動運動を避けて自動運動のみを実施する」理由として正しいのはどれか？",
+    options: [
+      "小児は痛みの訴えが乏しいため安全のため",
+      "他動運動による組織の破壊・出血の可能性があるため",
+      "小児の骨は脆弱で骨折リスクが高いため",
+      "自動運動の方が骨癒合が早まるという研究結果があるため",
+      "保護者への指導が容易であるため"
+    ],
+    ans: 1,
+    exp: "小児骨折では他動運動による組織の破壊・出血の可能性があるため自動運動のみを実施する。また骨端線損傷への配慮も重要。"
+  },
+  {
+    section: "複合・応用",
+    q: "作業療法の評価において「開かれた質問法（open question）」を用いて対象者の理解度を確認する例として最も適切なのはどれか？",
+    options: [
+      "「痛いですか？はい・いいえで答えてください」",
+      "「今後について主治医の先生はどのように話していますか？」",
+      "「肩を上げることはできますか？」",
+      "「ADLは自立していますか？」",
+      "「リハビリは続けていますか？」"
+    ],
+    ans: 1,
+    exp: "open questionは自由に回答できる質問形式。「今後について主治医の先生はどのように話していますか？」は対象者の理解度・認識を広く把握できる開かれた質問。"
+  },
+  {
+    section: "複合・応用",
+    q: "PIP関節（近位指節間関節）の代表的な変形とその発生機序の組み合わせで正しいのはどれか？",
+    options: [
+      "マレット変形：PIP関節掌側板の断裂による",
+      "スワンネック変形とボタン穴変形：PIP関節が好発部位",
+      "槌指変形：PIP関節伸展機構の断裂による",
+      "鷲手変形：PIP関節の側副靭帯断裂による",
+      "下垂指：PIP関節の屈筋腱断裂による"
+    ],
+    ans: 1,
+    exp: "PIP関節はSwan neck変形（DIP屈曲・PIP過伸展）とボタン穴変形（PIP屈曲・DIP過伸展）の好発部位。マレット変形はDIP関節の伸展機構断裂。"
+  },
+  {
+    section: "複合・応用",
+    q: "骨折後のX線読影についてOTが実施すべき適切な行動はどれか？",
+    options: [
+      "X線読影はOTの専門業務であり積極的に自己判断で活用する",
+      "X線は骨癒合の確認に不要なため一切参照しない",
+      "X線読影は医師の業務であるが、骨癒合の経過確認のため主治医に画像所見を問い合わせて活用する",
+      "X線から直接手術術式を判断し介入計画を立てる",
+      "X線読影の結果をもとに患者に独自の予後説明を行う"
+    ],
+    ans: 2,
+    exp: "X線読影は医師の業務。OTは骨折部の骨癒合経過・偽関節の有無を確認するため主治医に画像所見を問い合わせ、ROM訓練の方向・強度の判断材料にする。"
+  },
+
+  // ── Section 6: ばね指（第5回）──
+  {
+    section: "ばね指",
+    q: "腱鞘の靭帯性腱鞘（プーリーシステム）において「臨床的に最重要」とされる2つのプーリーの組み合わせとして正しいのはどれか？",
+    options: [
+      "A1プーリーとA3プーリー",
+      "A2プーリーとA4プーリー",
+      "C1プーリーとC3プーリー",
+      "A1プーリーとC2プーリー",
+      "A3プーリーとA5プーリー"
+    ],
+    ans: 1,
+    exp: "A2プーリー（基節骨レベル）とA4プーリー（中節骨レベル）が指の屈曲機能において極めて重要。損傷・肥厚が起こると著しい機能障害をきたす。"
+  },
+  {
+    section: "ばね指",
+    q: "屈筋腱狭窄性腱鞘炎（ばね指）の原因として誤っているのはどれか？",
+    options: [
+      "手や指をよく使う仕事やスポーツをしている",
+      "妊娠中・産後・更年期の女性",
+      "糖尿病・関節リウマチの疾患がある",
+      "透析を行っている",
+      "骨粗鬆症の治療のためステロイド内服薬を長期服用している"
+    ],
+    ans: 4,
+    exp: "ばね指の代表的な原因は手指の過負荷、ホルモン変化（妊娠・更年期）、糖尿病・関節リウマチ・透析など。ステロイド内服は直接的な原因として記載されていない。手指への負担増が主因。"
+  },
+  {
+    section: "ばね指",
+    q: "Quinnell分類（ばね指の重症度）でGrade IIIの特徴として正しいのはどれか？",
+    options: [
+      "疼痛のみでSnappingなし",
+      "弾発現象あり、自動的に伸展可能",
+      "弾発現象あり、自動伸展困難だが他動的には伸展可能",
+      "固定（屈曲拘縮または伸展拘縮）",
+      "腱断裂を伴う最重症型"
+    ],
+    ans: 2,
+    exp: "Quinnell分類：Grade I（疼痛のみ）→Grade II（弾発現象あり・自動伸展可）→Grade III（弾発現象あり・自動伸展困難・他動伸展可）→Grade IV（固定）。Grade I〜IIは保存療法、Grade III〜IVは手術適応が多い。"
+  },
+  {
+    section: "ばね指",
+    q: "ばね指の評価でTAM（Total Active Motion）の計算に使用する関節可動域の組み合わせとして正しいのはどれか？",
+    options: [
+      "手関節屈曲＋MP屈曲＋PIP屈曲",
+      "MP屈曲＋PIP屈曲＋DIP屈曲の合計から伸展制限の合計を引いた値",
+      "MP屈曲＋PIP屈曲の合計のみ",
+      "DIP屈曲のみを評価する",
+      "前腕回内外と手関節可動域の合計"
+    ],
+    ans: 1,
+    exp: "TAMはMP・PIP・DIP関節の能動的屈曲角度の合計から、各関節の伸展制限の合計を差し引いた値。ROM限界値（MP80°＋PIP110°＋DIP70°＝260°）と比較して機能度（%）を算出する。"
+  },
+  {
+    section: "ばね指",
+    q: "ばね指の装具療法について正しい記述はどれか？",
+    options: [
+      "DIP関節を軽度屈曲位で固定し、A1プーリー部へのストレスを軽減する",
+      "手関節を固定し指の動きを完全に制限する",
+      "伸展位で固定して屈筋腱の緊張を高める",
+      "夜間のみ使用し昼間は装着しない",
+      "MP関節を最大伸展位で固定する"
+    ],
+    ans: 0,
+    exp: "指スプリントはDIP関節を軽度屈曲位で固定し、深屈曲を制限してA1プーリー部への機械的ストレスを軽減し炎症の悪化を防ぐ。MPフレクションブロック装具と併用することもある。"
+  },
+  {
+    section: "ばね指",
+    q: "腱鞘内ステロイド注射に関する注意点として正しいのはどれか？",
+    options: [
+      "コラーゲン合成を促進するため積極的に繰り返し注射してよい",
+      "コラーゲン合成を抑制し、繰り返し注射（3回以上）で腱断裂リスク上昇の報告がある",
+      "全身性の副作用が強いため手指への局所投与は禁忌である",
+      "腱の強度を恒久的に増加させる効果がある",
+      "効果が即時的で以後再発しない"
+    ],
+    ans: 1,
+    exp: "ステロイド注射はコラーゲン合成を抑制するため腱強度が一時的に低下し、繰り返し注射（3回以上）で腱断裂リスクが上昇するとの報告がある。局所投与の利点は全身投与では届きにくい滑膜組織に直接作用できること。"
+  },
+  {
+    section: "ばね指",
+    q: "ばね指に対するA1プーリーストレッチの方法として正しいのはどれか？",
+    options: [
+      "IP関節を伸展位に保ったままMP関節を屈曲する",
+      "MP関節を60度以上屈曲位にして指腹を対側の手で圧迫し、1回30秒・5〜10セット実施する",
+      "手関節を屈曲しながら全指を伸展する",
+      "DIP関節のみを他動的に最大伸展する",
+      "示指から小指を同時に最大屈曲し5秒保持を繰り返す"
+    ],
+    ans: 1,
+    exp: "A1プーリーストレッチはMP関節を60度以上屈曲位にして指腹を圧迫し、A1プーリー部に直接ストレスをかける。1回30秒・5〜10セット。痛みが強い場合は1.5kgf程度から開始。ホームエクササイズとして指導可能。"
+  },
+  {
+    section: "ばね指",
+    q: "ばね指に対する超音波治療の設定として適切なのはどれか？",
+    options: [
+      "周波数3〜5MHz、強度3.0W/cm²、時間20〜30分",
+      "周波数1〜3MHz、強度0.5〜1.0W/cm²、時間5〜10分",
+      "周波数0.1MHz、強度5.0W/cm²、時間1〜2分",
+      "周波数10MHz以上、強度0.1W/cm²、時間30分",
+      "連続モードのみ使用し周波数・強度は不問"
+    ],
+    ans: 1,
+    exp: "ばね指への超音波治療の標準設定は周波数1〜3MHz、強度0.5〜1.0W/cm²、時間5〜10分。温熱効果による組織伸展性向上と血流改善による治癒促進が期待される。"
+  },
+  {
+    section: "ばね指",
+    q: "ばね指の炎症の主座はどこか？",
+    options: [
+      "骨膜（periosteum）",
+      "関節軟骨（articular cartilage）",
+      "腱鞘内の滑膜組織（synovial sheath）",
+      "靭帯性腱鞘（A2プーリー）そのもの",
+      "皮下脂肪組織"
+    ],
+    ans: 2,
+    exp: "ばね指の炎症の主座は腱鞘内の滑膜組織。過度な負荷により滑膜が肥厚・浮腫化し腱の滑走が障害される。安静の目的はA1プーリー部への機械的ストレスを軽減して滑膜の炎症・浮腫を改善することにある。"
+  },
+  {
+    section: "ばね指",
+    q: "手内在筋ストレッチがばね指に対して間接的な効果をもたらす理由として正しいのはどれか？",
+    options: [
+      "A1プーリーを直接伸張するため",
+      "手内在筋の柔軟性がPIP・DIP関節の伸展に間接的に影響するため",
+      "深指屈筋腱を直接リリースするため",
+      "骨間筋を強化して腱鞘への負荷を軽減するため",
+      "浮腫を吸収して腱の滑走スペースを広げるため"
+    ],
+    ans: 1,
+    exp: "手内在筋ストレッチ（MP関節伸展・IP関節屈曲）は直接A1プーリーに作用するのではなく、手内在筋の柔軟性がPIP・DIP関節の伸展に間接的に影響することを考慮した介入。"
+  },
+
+  // ── Section 7: 母指CM関節症（第5回）──
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症のEaton分類（1984年改訂版）においてStage IIの特徴として正しいのはどれか？",
+    options: [
+      "明らかな関節症変化なし・関節液貯留による関節裂隙の軽度開大",
+      "関節裂隙狭小化・2mm以下の骨棘や遊離体",
+      "著明な関節症性変化・骨硬化・骨嚢胞・2mm以上の骨棘",
+      "STT関節（舟状大菱形小菱形骨間関節）にも関節症性変化",
+      "完全脱臼を伴う末期変化"
+    ],
+    ans: 1,
+    exp: "Eaton分類：Stage I（関節症変化なし・裂隙開大）、Stage II（裂隙狭小化・2mm以下の骨棘・遊離体）、Stage III（著明な関節症変化・2mm以上の骨棘・骨硬化・骨嚢胞）、Stage IV（STT関節にも変化）。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症の保存療法の有効性について正しい記述はどれか？",
+    options: [
+      "Stage I〜IIにのみ有効で約30〜50%の患者に効果がある",
+      "Stage I〜IIは約70〜90%、Stage III〜IVも約50〜70%に有効であり積極的に勧めるべき治療である",
+      "保存療法は全例で無効であり手術を優先する",
+      "若年者のみに有効で高齢者には効果がない",
+      "Stage IVには禁忌であり実施してはならない"
+    ],
+    ans: 1,
+    exp: "保存療法の有効性：Stage I〜IIは約70〜90%、Stage III〜IVも約50〜70%に有効。保存療法は積極的に患者に勧めるべき治療であり、短対立装具・生活指導・NSAIDs・ステロイド注射が含まれる。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症の短対立装具（スプリント）について正しい記述はどれか？",
+    options: [
+      "手関節も固定し全可動域を制限する",
+      "母指IP関節も固定して腱の滑走を制限する",
+      "手関節・母指IP関節は固定せず、母指MP関節を軽度屈曲位・対立位で固定してつまみ・握りが可能な形状にする",
+      "小指球を除いて作成し手のアーチは考慮しない",
+      "装着は疼痛時のみで就寝中は必ず外す"
+    ],
+    ans: 2,
+    exp: "短対立装具は手関節・母指IP関節は固定せず母指MP関節を軽度屈曲・対立位で固定。つまみ・握り動作が可能な形状に作成。開始後3か月は1日23時間装着（入浴・手洗い以外）し就寝時も装着する。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症で疼痛が生じやすいADL動作の特徴として正しいのはどれか？",
+    options: [
+      "母指の伸展外転方向への動きで疼痛が出やすい",
+      "母指を屈曲内転方向へ誘導する運動（つまみ・ひねり動作）で疼痛が出やすい",
+      "母指以外の指の屈曲で疼痛が出やすい",
+      "手関節の掌屈時にのみ疼痛が生じる",
+      "疼痛はADLには出現せず安静時痛のみである"
+    ],
+    ans: 1,
+    exp: "母指CM関節症では母指を屈曲内転方向へ誘導する動作（ペットボトルを開ける・箸を使う・包丁を握るなど）で疼痛が出やすい。画像所見と症状に乖離がしばしばみられ、関節の不安定性や滑膜炎が影響する。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節の安定性について正しい記述はどれか？",
+    options: [
+      "骨形態が主に安定性を担っており靭帯の役割は小さい",
+      "骨形態よりも靭帯・関節包などの軟部組織が安定性を担っており、dAOL（beak ligament）・IML・DRLが重要",
+      "母指CM関節は蝶番関節のため靭帯断裂しても安定性は保たれる",
+      "STT関節の靭帯のみが安定性を保証する",
+      "筋力が主要な安定化因子であり靭帯の寄与は無視できる"
+    ],
+    ans: 1,
+    exp: "母指CM関節は鞍関節であり、骨形態よりも靭帯・関節包などの軟部組織（dAOL・IML・DRL）が安定性を担う。母指CM関節は母指運動のkey jointであり軟部組織の保護が重要。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症に対する関節形成術後のリハビリテーションで術後3週から2か月に開始する運動として正しいのはどれか？",
+    options: [
+      "重負荷の把持訓練と洗濯ばさみ・菜箸を使った作業",
+      "母指CM関節の自動運動（Kapandji法に準じた対立運動・掌側・橈側への外転運動）とADL軽作業の指導",
+      "前腕回内外の積極的な抵抗運動",
+      "握力増強のための強力なスクイーズ訓練",
+      "thumb spica splintを外し全可動域の他動ストレッチを開始"
+    ],
+    ans: 1,
+    exp: "関節形成術後プログラム：術後3週までは固定保護中心、術後3週〜2か月はCM関節自動運動（Kapandji法による対立・外転）とADL軽作業、術後2か月以降に徐々に負荷増加。疼痛に応じて負荷をかけ無理な握力練習は行わない。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症の生活指導で特に注意が必要な動作として正しいのはどれか？",
+    options: [
+      "肩関節外転・肘関節屈曲動作",
+      "足首の背屈・底屈動作",
+      "洗濯ばさみと菜箸の使用（装具装着のままでも痛いことが多い）",
+      "ストローを使った飲み物摂取",
+      "大きなボールを両手で抱えるような動作"
+    ],
+    ans: 2,
+    exp: "母指CM関節症の生活指導では洗濯ばさみ・菜箸は装具装着のままでも痛いことが多い禁忌動作。疼痛を誘発する手の酷使は基本的に禁止。疼痛軽減の成功体験が装具継続のモチベーションに繋がる。"
+  },
+  {
+    section: "母指CM関節症",
+    q: "母指CM関節症の手術療法の選択肢において「ピンチ力を優先する場合」に選択されるのはどれか？",
+    options: [
+      "滑膜切除（関節鏡視下手術）",
+      "第1中手骨骨切り術",
+      "靭帯再建術",
+      "関節形成術（可動域優先）",
+      "関節固定術（Stage II・III、ピンチ力優先）"
+    ],
+    ans: 4,
+    exp: "母指CM関節症の手術選択：靭帯再建術（Stage I・II・不安定性あり）、骨切り術（Stage I〜IV・内転拘縮）、関節鏡視下（滑膜切除等）、関節形成術（Stage II〜IV・可動域優先）、関節固定術（Stage II・III・ピンチ力優先）。"
+  },
+
+  // ── Section 8: 屈筋腱損傷（第6回）──
+  {
+    section: "屈筋腱損傷",
+    q: "屈筋腱のZone分類において「No man's land」と呼ばれ癒着リスクが最も高いのはどれか？",
+    options: [
+      "Zone I（FDS停止部より遠位）",
+      "Zone II（FDS停止部〜A1プーリー間）",
+      "Zone III（手根管遠位〜A1プーリー）",
+      "Zone IV（手根管内）",
+      "Zone V（筋腱移行部〜手根管）"
+    ],
+    ans: 1,
+    exp: "Zone IIは伸縮性の乏しい腱鞘内にFDP・FDSが走行し、強固な癒着が生じやすく「no man's land」と呼ばれる。腱紐損傷は再断裂リスクも高める。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "腱の修復過程において「Intrinsic healing（内因性治癒）」の特徴として正しいのはどれか？",
+    options: [
+      "腱周囲組織から結合組織が侵入し肉芽組織が腱表面に癒合する",
+      "固定法では主にこちらが優位となる",
+      "腱固有の腱細胞が膠原線維を産生し、癒着形成が最小限で早期運動療法の理論的根拠となる",
+      "Extrinsic healingより治癒速度が遅い",
+      "1990年代にLindsayが提唱した比較的新しい概念である"
+    ],
+    ans: 2,
+    exp: "Intrinsic healing（1960年Lindsay提唱）は腱固有の腱細胞が膠原線維を産生し、腱紐・滑液から栄養供給される。癒着形成が最小限で早期運動療法の理論的根拠・現在の主流アプローチ。Extrinsic healingは腱周囲組織からの結合組織侵入で強固な癒着を形成する。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "屈筋腱縫合後の後療法選択フローで「3週間固定法を選択する」条件として正しいのはどれか？",
+    options: [
+      "患者の協力・理解度が良好で tensile strength が1,500g以上の場合",
+      "骨折・重篤な血管神経損傷の合併または修復腱の緊張が高い場合",
+      "Zone IIIの単純腱断裂で合併損傷がない場合",
+      "Place & Hold法を実施する予定の場合",
+      "術後1週以内に自動運動を開始する予定の場合"
+    ],
+    ans: 1,
+    exp: "3週間固定法の適応：①骨折合併、②重篤な血管・神経損傷、③修復腱の緊張が高い、④患者の協力・理解度が不良、⑤tensile strength＜1,500g。早期運動療法はtensile strength≥1,500g・患者協力良好の場合に適応。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "Modified Kleinert法の特徴として正しいのはどれか？",
+    options: [
+      "セラピストが他動的に屈曲位に置き、患者が筋収縮でその位置を保持する",
+      "近位関節を固定して遠位関節のみ屈伸させFDPとFDSを独立して滑走させる",
+      "背側スプリント装着下でRubber Band Traction（RBT）により他動屈曲・自動伸展を繰り返す",
+      "MP・PIP屈曲位でDIP屈伸し、次にMP・DIP屈曲位でPIP屈伸する",
+      "手関節・IP関節を完全伸展位で固定し3週間安静にする"
+    ],
+    ans: 2,
+    exp: "Modified Kleinert法は背側スプリント装着下でRubber Band Traction（RBT）により他動屈曲・自動伸展を繰り返す。手掌部に滑車を取り付けて牽引方向を調整するKleinert変法もある。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "Duran法の手技として正しいのはどれか？",
+    options: [
+      "背側スプリント装着下でRBTにより他動屈曲・自動伸展を繰り返す",
+      "MP・PIP屈曲位でDIP屈伸してFDP縫合部を遠位に動かしFDSとの癒着を防ぎ、次にMP・DIP屈曲位でPIP屈伸して両腱縫合部の癒着を防ぐ",
+      "PIP関節を90°屈曲位に保持してDIP関節の動きを観察する",
+      "セラピストが他動的に全指を屈曲位に置き患者がその位置を保持する",
+      "近位関節を固定して遠位関節のみを屈伸させる"
+    ],
+    ans: 1,
+    exp: "Duran法：①MP・PIP屈曲位でDIP屈伸→FDP縫合部が遠位に動きFDSとの癒着防止、②MP・DIP屈曲位でPIP屈伸→両腱縫合部と周囲の癒着防止。各他動運動を繰り返す。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "屈筋腱損傷後の背側伸展制限スプリントの基本肢位として正しいのはどれか？",
+    options: [
+      "手関節0°（中間位）・MP0°・IP0°",
+      "手関節20〜30°背屈・MP0°・IP0°",
+      "手関節20〜30°掌屈・MP50〜60°屈曲・IP0°（伸展位）",
+      "手関節45°掌屈・MP90°屈曲・IP最大屈曲位",
+      "手関節0°・MP最大屈曲・IP伸展位"
+    ],
+    ans: 2,
+    exp: "背側伸展制限スプリントの基本肢位：手関節20〜30°掌屈（屈筋腱張力軽減・再断裂予防）、MP50〜60°屈曲（側副靭帯伸長位保持・伸展拘縮予防）、IP0°（RBTで他動屈曲）。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "TAM法（Total Active Motion）での「良（Good）」判定の基準として正しいのはどれか？",
+    options: [
+      "TAM値≥220°または対側比≥75%",
+      "TAM値180〜219°または対側比50〜74%",
+      "TAM値130〜179°または対側比25〜49%",
+      "TAM値＜130°または対側比＜25%",
+      "TAM値200°以上かつ対側比90%以上"
+    ],
+    ans: 1,
+    exp: "TAM判定基準：優（Excellent）≥220°・≥75%、良（Good）180〜219°・50〜74%、可（Fair）130〜179°・25〜49%、不可（Poor）＜130°・＜25%。TAM＝（MP+PIP+DIP自動屈曲合計）－（伸展不足角度合計）。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "屈筋腱損傷後の早期運動療法において「3週間未満での他動伸展が禁忌」である理由として正しいのはどれか？",
+    options: [
+      "浮腫が増悪し縫合部の血流が悪化するため",
+      "腱縫合部の引っ張り強度が十分でなく再断裂リスクが高いため",
+      "Intrinsic healingを阻害して癒着を促進するため",
+      "スプリントが外れやすくなり固定効果が失われるため",
+      "神経血管損傷を合併している場合に知覚異常を招くため"
+    ],
+    ans: 1,
+    exp: "腱縫合後3週間未満は縫合部の引っ張り強度が不十分なため他動伸展は再断裂リスクが高く禁忌。他動伸展が許可されるのは5週経過後（軽作業期）から。腱強度は術後8週で急激に増大する。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "Blocking訓練において「FDP/FDSの走行（腱の真上）を直接支持してはならない」理由として正しいのはどれか？",
+    options: [
+      "皮膚への圧迫が血行障害を起こすため",
+      "腱の直上を支持すると腱滑走を妨げるため。骨（指節骨）を支持するのが原則",
+      "縫合部に直接の機械的刺激を与えると炎症が増悪するため",
+      "患者が疼痛を訴えやすくなりコンプライアンスが低下するため",
+      "腱鞘内圧が上昇してExtrinsic healingが促進されるため"
+    ],
+    ans: 1,
+    exp: "Blocking訓練では近位関節を固定して遠位関節のみ屈伸しFDP・FDSを独立して滑走させる。FDP/FDSの走行（腱の真上）を手で支持すると腱滑走を妨げるため、骨（指節骨）を支持することが原則。"
+  },
+  {
+    section: "屈筋腱損傷",
+    q: "屈筋腱損傷後の後療法に関するEBP（日本ハンドセラピー学会CQ）の記述として正しいのはどれか？",
+    options: [
+      "CQ3でPlace & Hold法はZone II術後8週のTAMがModified Kleinert法より不良であると示された",
+      "3週間固定法後のハンドセラピーは強く推奨されている（グレードA）",
+      "CQ3でPlace & Hold法はZone II術後8週のTAMがModified Kleinert法より良好で弱い推奨（D）、早期自動屈曲伸展法はZone I〜IIIで弱い推奨（C）",
+      "早期自動屈曲伸展法は長期（1年）でもModified Kleinert法より明らかに優れた成績を示す",
+      "認定ハンドセラピストによる直接介入の効果はRCTで否定されている"
+    ],
+    ans: 2,
+    exp: "CQ2：早期自動屈曲伸展法は弱い推奨（C）でZone I〜IIIで自動運動群がROM改善、ただし長期（1年）では差が縮小。CQ3：Place & Hold法はZone II術後8週TAMがModified Kleinert法より良好（p=0.001）で弱く推薦（非常に弱いD）。"
+  },
+
+  // ── Section 9: 伸筋腱損傷（第7回）──
+  {
+    section: "伸筋腱損傷",
+    q: "伸筋腱Zone分類において「槌指（Mallet finger）」が生じるZoneはどれか？",
+    options: [
+      "Zone III（PIP関節部）",
+      "Zone V（MP関節・Knuckle部）",
+      "Zone I・II（DIP関節・中節骨部）",
+      "Zone VII（伸筋支帯部）",
+      "Zone VIII（筋腱移行部）"
+    ],
+    ans: 2,
+    exp: "槌指（Mallet finger）は伸筋腱Zone I（DIP関節部）・Zone II（中節骨部）の終止腱断裂または剥離骨折で生じる。DIPが下垂・屈曲位を呈する。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "ボタン穴変形（Boutonnière deformity）の発生機序として正しいのはどれか？",
+    options: [
+      "終止腱が断裂し側索が近位移動してPIPに伸展力が集中する",
+      "Zone III・IVの中央索断裂により側索が掌側に落下し、PIP屈曲・DIP過伸展変形が完成する",
+      "MP関節の尺側脱臼により伸筋腱が橈側に偏位する",
+      "内在筋の痙縮・短縮と掌側板損傷によりPIPが過伸展する",
+      "A2プーリー断裂による腱の浮き上がり現象で生じる"
+    ],
+    ans: 1,
+    exp: "ボタン穴変形：Zone III（PIP関節部）の中央索断裂→側索が掌側に落下→PIP屈曲・DIP過伸展。放置すると固定変形へ移行。PIP伸展スプリント＋DIP自動屈伸が治療の基本。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "スワンネック変形（Swan neck deformity）の外観と発生機序として正しいのはどれか？",
+    options: [
+      "DIP過伸展・PIP屈曲変形で中央索断裂が主因",
+      "PIP過伸展・DIP屈曲変形で、槌指の放置または内在筋の痙縮・掌側板損傷が原因",
+      "MP伸展不全・PIP屈曲変形で尺骨神経麻痺が主因",
+      "DIP屈曲・PIP屈曲変形でFDP腱の癒着が主因",
+      "MP過伸展・DIP屈曲変形でZone V損傷が主因"
+    ],
+    ans: 1,
+    exp: "スワンネック変形はPIP過伸展・DIP屈曲変形。槌指（Zone I）の放置で終止腱停止部消失→指背腱膜全体が近位移動→PIPに伸展力集中→PIP過伸展・DIP屈曲（スワンネック）。RA・内在筋短縮・掌側板損傷も原因となる。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "Elson testの手順と「中央索断裂あり」の判定基準として正しいのはどれか？",
+    options: [
+      "DIP関節を90°屈曲位にしてPIP関節の動きを観察。PIPが伸展できなければ断裂あり",
+      "PIP関節を90°屈曲位に保持・中節骨背側を固定し患者に指の伸展を試みさせる。DIP関節が固定・硬くなりDIPが伸展しにくくなれば断裂あり（側索に力が分散するため）",
+      "MP関節を0°に保ちDIP関節の自動屈曲を評価。DIPが屈曲できなければ断裂あり",
+      "手関節を掌屈位にして全指の伸展を評価。伸展不全があれば断裂あり",
+      "PIP関節を屈曲位にして圧痛を確認。圧痛があれば断裂あり"
+    ],
+    ans: 1,
+    exp: "Elson test：①PIP関節を90°屈曲位に保持、②中節骨背側（PIP関節背側）を固定、③患者に伸展を試みさせてDIP関節の動きを観察。中央索断裂あり→DIPが固定・硬くなり伸展しにくい（側索に力が分散）。断裂なし→DIPが自由に動き屈曲できる。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "腱性槌指（Zone I・腱性断裂）の保存療法で正しいのはどれか？",
+    options: [
+      "PIP関節のみを伸展位で6週間固定する",
+      "DIP関節を伸展位でスプリント固定8〜12週継続し、スプリント交換中も一瞬でも屈曲させてはならない",
+      "手関節・MP関節を固定し指全体の運動を禁止する",
+      "骨性槌指と同様に石黒法による経皮的固定術を第一選択とする",
+      "固定は4週間で十分で、それ以降は自動運動を開始してよい"
+    ],
+    ans: 1,
+    exp: "腱性槌指の保存療法はDIP伸展位スプリント8〜12週が第一選択。「1秒でも屈曲させると固定期間が最初から再スタート」が鉄則。スプリント清拭交換中もDIPを伸展位に保つよう患者・家族に指導する。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "伸筋腱Zone III（中央索断裂）のスプリント療法として正しいのはどれか？",
+    options: [
+      "DIP関節を伸展位で8〜12週固定する",
+      "手関節を20〜30°背屈位で固定する",
+      "PIP関節を伸展位でスプリント固定しDIP関節は自動屈伸を許可する",
+      "MP関節を屈曲位・PIP・DIP関節を完全伸展位で固定する",
+      "全指を最大屈曲位で固定して中央索の修復を促す"
+    ],
+    ans: 2,
+    exp: "Zone III（中央索断裂・ボタン穴変形）の治療：PIP関節を伸展位でスプリント固定（PIP屈曲変形の矯正）＋DIP関節の自動屈伸（側索の滑走維持・掌側脱落防止）。疑わしい場合はPIP伸展位スプリントを予防的に選択する。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "指伸展機構（Extensor Mechanism）における「中央索（Central Slip）」の機能として正しいのはどれか？",
+    options: [
+      "DIP関節背側の末節骨基部に付着し、DIP伸展の主役を担う",
+      "PIP関節背側の中節骨基部に付着し、主にPIP関節の伸展に関与する（特にMP屈曲位で優位）",
+      "骨間筋・虫様筋の腱が合流した構造で側索とも呼ばれる",
+      "MP関節背側に付着し、MP伸展のみに関与する",
+      "Zone Vで腱の尺側脱臼を防ぐ構造として機能する"
+    ],
+    ans: 1,
+    exp: "中央索（Central Slip）は指伸筋腱の中央部分でPIP関節背側の中節骨基部に付着。PIP関節の伸展に主に関与（MP屈曲位で中央索が優位）。断裂→ボタン穴変形。終止腱は中央索と側索が合流し末節骨基部に付着（DIP伸展の主役）。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "伸筋腱Zone V（MP関節・Knuckle部）の特徴として正しいのはどれか？",
+    options: [
+      "終止腱の断裂によりDIPが屈曲位となる槌指が典型的変形",
+      "RA・変形性関節症による皮下断裂が多く端々縫合が困難",
+      "ナックル部は突出しており皮膚・関節包損傷・骨傷の合併が多く、腱被損傷で伸筋腱が尺側脱臼しMP伸展制限となる",
+      "腱鞘内で複数腱が走行するため最も癒着リスクが高い",
+      "DIP伸展位スプリントを8〜12週継続することが標準治療"
+    ],
+    ans: 2,
+    exp: "Zone V（MP・Knuckle部）：ナックル部は突出しているため皮膚・関節包損傷・骨傷の合併が多い。腱被損傷で伸筋腱が尺側脱臼しMP伸展制限となる。手術修復＋早期運動療法が治療方針。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "槌指を放置した場合に移行しやすい変形はどれか？またそのメカニズムとして正しいのはどれか？",
+    options: [
+      "ボタン穴変形。中央索断裂により側索が掌側に落下するため",
+      "鷲手変形。尺骨神経麻痺が続発するため",
+      "スワンネック変形。終止腱停止部消失で指背腱膜が近位移動し伸展力が中央索に集中してPIP過伸展・DIP屈曲となるため",
+      "下垂指。橈骨神経の二次的圧迫が起こるため",
+      "猿手変形。正中神経の機能不全が続発するため"
+    ],
+    ans: 2,
+    exp: "槌指（Zone I）放置→終止腱が停止部を失う→指背腱膜全体が近位移動→伸展力が中央索に集中→PIP過伸展・DIP屈曲（スワンネック変形）へ移行。早期・確実なDIP伸展位固定が必須。"
+  },
+  {
+    section: "伸筋腱損傷",
+    q: "伸筋腱修復後の後療法「Reverse Kleinert法（逆クライナート法）」の説明として正しいのはどれか？",
+    options: [
+      "背側スプリントでRBTにより他動屈曲・自動伸展を繰り返す屈筋腱用の手技",
+      "掌側スプリントを用いてRBTで手指を他動伸展位に引き、自動屈曲を行う早期運動療法",
+      "DIP関節のみを伸展位に固定してPIP・MP関節の自動運動を行う手技",
+      "Blocking訓練と同義で近位関節を固定して遠位関節のみ屈伸させる手技",
+      "Duran法と同義でFDPとFDSの癒着を予防する手技"
+    ],
+    ans: 1,
+    exp: "Reverse Kleinert法（逆クライナート法）は伸筋腱修復後の早期運動療法。掌側スプリントを用いてRBTで手指を他動伸展位に牽引し、自動屈曲運動を行う。屈筋腱用のModified Kleinert法の「伸展版」として理解する。"
+  },
+];
+
+// ============================================================
+// SECTION ICONS
+// ============================================================
+const SECTION_META = {
+  "ICF・基礎":      { icon: "🧩", count: 6 },
+  "手・上肢の解剖": { icon: "✋", count: 10 },
+  "骨折の作業療法": { icon: "🦴", count: 10 },
+  "橈骨遠位端骨折": { icon: "💪", count: 10 },
+  "複合・応用":     { icon: "📝", count: 13 },
+  "ばね指":         { icon: "👆", count: 10 },
+  "母指CM関節症":   { icon: "👍", count: 8 },
+  "屈筋腱損傷":     { icon: "✊", count: 10 },
+  "伸筋腱損傷":     { icon: "🖐", count: 10 },
+};
+
+// ============================================================
+// APP STATE & STORAGE
+// ============================================================
+const STORAGE_KEY = 'ot_quiz_v3';
+
+function loadData() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || { attempts: 0, correct_total: 0, total: 0, per_q: {} };
+  } catch { return { attempts: 0, correct_total: 0, total: 0, per_q: {} }; }
+}
+
+function saveData(d) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+}
+
+let data = loadData();
+let currentQueue = [];
+let currentIdx = 0;
+let sessionCorrect = 0;
+let sessionTotal = 0;
+let sessionMode = 'all';
+
+function getSectionStats() {
+  const sections = {};
+  QUESTIONS.forEach((q, i) => {
+    if (!sections[q.section]) sections[q.section] = { correct: 0, total: 0 };
+    const pd = data.per_q[i] || { c: 0, t: 0 };
+    sections[q.section].correct += pd.c;
+    sections[q.section].total += pd.t;
+  });
+  return sections;
+}
+
+function getWeakQuestions() {
+  return QUESTIONS.map((q, i) => {
+    const pd = data.per_q[i] || { c: 0, t: 0 };
+    const rate = pd.t > 0 ? pd.c / pd.t : null;
+    return { idx: i, rate };
+  }).filter(x => x.rate !== null && x.rate < 0.5);
+}
+
+// ============================================================
+// HOME
+// ============================================================
+function renderHome() {
+  data = loadData();
+  const total = data.total;
+  const acc = total > 0 ? Math.round(data.correct_total / total * 100) : null;
+  document.getElementById('home-accuracy').textContent = acc !== null ? acc + '%' : '—%';
+  document.getElementById('home-attempts').textContent = data.attempts + '回';
+
+  const weakQs = getWeakQuestions();
+  document.getElementById('home-weak').textContent = weakQs.length + '問';
+
+  const secStats = getSectionStats();
+  const weakSections = Object.entries(secStats).filter(([, v]) => v.total > 0 && v.correct / v.total < 0.5);
+  const alertEl = document.getElementById('weak-alert');
+  if (weakSections.length > 0) {
+    alertEl.style.display = '';
+    document.getElementById('weak-tags').innerHTML = weakSections.map(([name]) =>
+      `<span class="weak-tag">${name}</span>`).join('');
+  } else {
+    alertEl.style.display = 'none';
+  }
+
+  const weakCard = document.getElementById('weak-mode-card');
+  weakCard.classList.toggle('disabled', weakQs.length === 0);
+
+  // Section buttons
+  const grid = document.getElementById('section-btn-grid');
+  const sections = [...new Set(QUESTIONS.map(q => q.section))];
+  grid.innerHTML = sections.map(sec => {
+    const meta = SECTION_META[sec] || { icon: '📖', count: '?' };
+    const st = secStats[sec] || { correct: 0, total: 0 };
+    const pct = st.total > 0 ? Math.round(st.correct / st.total * 100) + '%' : '未挑戦';
+    return `<button class="section-btn" onclick="startQuiz('section','${sec}')">
+      <span class="sb-icon">${meta.icon}</span>
+      <span class="sb-name">${sec}</span>
+      <span class="sb-count">${meta.count}問 · ${pct}</span>
+    </button>`;
+  }).join('');
+}
+
+function showScreen(id) {
+  ['home','quiz','result'].forEach(s => document.getElementById(s).style.display = 'none');
+  document.getElementById(id).style.display = 'flex';
+}
+
+function goHome() {
+  showScreen('home');
+  renderHome();
+}
+
+function resetHistory() {
+  if (!confirm('学習履歴をリセットしますか？')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  data = loadData();
+  renderHome();
+}
+
+// ============================================================
+// QUIZ
+// ============================================================
+function startQuiz(mode, sectionName) {
+  data = loadData();
+  sessionMode = mode;
+  sessionCorrect = 0;
+  sessionTotal = 0;
+
+  if (mode === 'weak') {
+    const weakQs = getWeakQuestions();
+    if (weakQs.length === 0) { alert('苦手問題がありません。全問モードで練習してください。'); return; }
+    currentQueue = shuffle(weakQs.map(x => x.idx));
+  } else if (mode === 'section') {
+    currentQueue = shuffle(
+      QUESTIONS.map((q, i) => ({ q, i }))
+        .filter(x => x.q.section === sectionName)
+        .map(x => x.i)
+    );
+    sessionMode = sectionName;
+  } else {
+    currentQueue = shuffle(QUESTIONS.map((_, i) => i));
+  }
+
+  currentIdx = 0;
+  data.attempts += 1;
+  saveData(data);
+
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const qIdx = currentQueue[currentIdx];
+  const q = QUESTIONS[qIdx];
+  const total = currentQueue.length;
+
+  document.getElementById('q-label').textContent = `問題 ${currentIdx + 1} / ${total}`;
+  const modeLabel = sessionMode === 'weak' ? '苦手集中' : sessionMode === 'all' ? '全問' : sessionMode;
+  document.getElementById('q-mode-label').textContent = modeLabel + 'モード';
+  document.getElementById('progress-fill').style.width = (currentIdx / total * 100) + '%';
+  document.getElementById('score-badge').textContent = `${sessionCorrect} / ${sessionTotal}`;
+
+  const letters = ['A', 'B', 'C', 'D', 'E'];
+  const html = `
+    <div class="section-tag">${q.section}</div>
+    <div class="question-text">Q${currentIdx + 1}. ${q.q}</div>
+    <div class="options-list">
+      ${q.options.map((opt, i) => `
+        <button class="option-btn" onclick="selectAnswer(${i}, ${q.ans}, ${qIdx})" id="opt-${i}">
+          <span class="option-letter">${letters[i]}</span>
+          <span>${opt}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div class="explanation-box" id="exp-box">
+      <strong>📝 解説</strong>
+      ${q.exp}
+    </div>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">
+      ${currentIdx + 1 < currentQueue.length ? '次の問題 →' : '結果を見る →'}
+    </button>
+  `;
+
+  const body = document.getElementById('quiz-body');
+  body.innerHTML = html;
+  body.scrollTop = 0;
+  body.style.animation = 'none';
+  requestAnimationFrame(() => { body.style.animation = 'slideUp 0.3s ease'; });
+}
+
+function selectAnswer(selected, correct, qIdx) {
+  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+  const isCorrect = selected === correct;
+  document.querySelectorAll('.option-btn')[selected].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) document.querySelectorAll('.option-btn')[correct].classList.add('reveal-correct');
+
+  if (!data.per_q[qIdx]) data.per_q[qIdx] = { c: 0, t: 0 };
+  data.per_q[qIdx].t += 1;
+  if (isCorrect) data.per_q[qIdx].c += 1;
+
+  sessionTotal += 1;
+  if (isCorrect) sessionCorrect += 1;
+  data.correct_total = (data.correct_total || 0) + (isCorrect ? 1 : 0);
+  data.total = (data.total || 0) + 1;
+  saveData(data);
+
+  document.getElementById('score-badge').textContent = `${sessionCorrect} / ${sessionTotal}`;
+  document.getElementById('exp-box').style.display = '';
+  document.getElementById('next-btn').style.display = '';
+  document.getElementById('next-btn').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function nextQuestion() {
+  currentIdx += 1;
+  if (currentIdx >= currentQueue.length) showResult();
+  else renderQuestion();
+}
+
+// ============================================================
+// RESULT
+// ============================================================
+function showResult() {
+  const pct = sessionTotal > 0 ? Math.round(sessionCorrect / sessionTotal * 100) : 0;
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-correct').textContent = sessionCorrect;
+  document.getElementById('res-wrong').textContent = sessionTotal - sessionCorrect;
+  document.getElementById('res-total').textContent = sessionTotal;
+
+  let grade, msg;
+  if (pct >= 90) { grade = 'EXCELLENT！'; msg = '素晴らしい！ほぼ完璧です。'; }
+  else if (pct >= 75) { grade = 'GREAT！'; msg = '良い結果です。苦手分野を復習しましょう。'; }
+  else if (pct >= 60) { grade = 'GOOD'; msg = 'もう少しです。苦手問題を集中練習しましょう。'; }
+  else { grade = 'KEEP STUDYING'; msg = '資料を見直して再チャレンジしてください。'; }
+
+  document.getElementById('res-grade').textContent = grade;
+  document.getElementById('res-msg').textContent = msg;
+
+  const secStats = getSectionStats();
+  const listEl = document.getElementById('section-breakdown-list');
+  listEl.innerHTML = Object.entries(secStats).map(([name, v]) => {
+    const p = v.total > 0 ? Math.round(v.correct / v.total * 100) : 0;
+    const color = p >= 75 ? '#27ae60' : p >= 50 ? '#e67e22' : '#e74c3c';
+    return `
+      <div class="section-row">
+        <div class="section-name">${name}</div>
+        <div class="section-bar-wrap">
+          <div class="section-bar-fill" style="width:${p}%;background:${color}"></div>
+        </div>
+        <div class="section-pct">${v.total > 0 ? p + '%' : '—'}</div>
+      </div>`;
+  }).join('');
+
+  showScreen('result');
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderHome();
+</script>
+</body>
+</html>
