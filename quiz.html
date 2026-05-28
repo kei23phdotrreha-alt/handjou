@@ -1794,8 +1794,14 @@ function renderHome() {
 }
 
 function showScreen(id) {
-  ['home','quiz','result'].forEach(s => document.getElementById(s).style.display = 'none');
-  document.getElementById(id).style.display = 'flex';
+  ['home','quiz','result'].forEach(s => {
+    const el = document.getElementById(s);
+    el.style.display = 'none';
+  });
+  const target = document.getElementById(id);
+  target.style.display = 'flex';
+  target.style.flexDirection = 'column';
+  window.scrollTo(0, 0);
 }
 
 function goHome() {
@@ -1882,11 +1888,12 @@ function renderQuestion() {
 }
 
 function selectAnswer(selected, correct, qIdx) {
-  document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  const btns = document.querySelectorAll('#quiz-body .option-btn');
+  btns.forEach(b => { b.disabled = true; b.onclick = null; });
 
   const isCorrect = selected === correct;
-  document.querySelectorAll('.option-btn')[selected].classList.add(isCorrect ? 'correct' : 'wrong');
-  if (!isCorrect) document.querySelectorAll('.option-btn')[correct].classList.add('reveal-correct');
+  if (btns[selected]) btns[selected].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect && btns[correct]) btns[correct].classList.add('reveal-correct');
 
   if (!data.per_q[qIdx]) data.per_q[qIdx] = { c: 0, t: 0 };
   data.per_q[qIdx].t += 1;
@@ -1899,9 +1906,14 @@ function selectAnswer(selected, correct, qIdx) {
   saveData(data);
 
   document.getElementById('score-badge').textContent = `${sessionCorrect} / ${sessionTotal}`;
-  document.getElementById('exp-box').style.display = '';
-  document.getElementById('next-btn').style.display = '';
-  document.getElementById('next-btn').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  const expBox = document.getElementById('exp-box');
+  const nextBtn = document.getElementById('next-btn');
+  if (expBox) expBox.style.display = 'block';
+  if (nextBtn) {
+    nextBtn.style.display = 'block';
+    setTimeout(() => nextBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
 }
 
 function nextQuestion() {
